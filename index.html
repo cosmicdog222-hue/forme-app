@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forme - Clothes That Understand Your Shape</title>
+    <link rel="stylesheet" href="styles.css">
+<script src="https://sites.super.myninja.ai/_assets/ninja-daytona-script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="brand-lockup">
+                <img src="assets/forme-logo.png" alt="Forme logo" class="brand-mark">
+                <div>
+                    <div class="logo">Forme</div>
+                    <p class="brand-tagline">Clothes that understand your shape.</p>
+                </div>
+            </div>
+            <div class="user-actions">
+                <button class="btn btn-secondary" id="clearDataBtn">Clear Saved Data</button>
+                <button class="btn btn-success" id="saveDataBtn">Save My Measurements</button>
+            </div>
+        </header>
+
+        <main>
+            <aside class="measurement-panel">
+                <h2>📏 Your Measurements</h2>
+                
+                <div id="savedInfo" class="saved-info" style="display: none;">
+                    <strong>✓ Last saved:</strong>
+                    <span id="savedDate"></span>
+                </div>
+
+                <form id="measurementForm">
+                    <!-- Gender Selection -->
+                    <div class="form-section">
+                        <label class="form-label">Gender</label>
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="gender" value="male" checked>
+                                Men's
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="gender" value="female">
+                                Women's
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="gender" value="unisex">
+                                Unisex
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Basic Body Measurements -->
+                    <div class="form-section">
+                        <h3>Basic Measurements</h3>
+                        <div class="form-row">
+                            <div>
+                                <label class="form-label">Height</label>
+                                <span class="form-sublabel">e.g., 175 cm or 5'9"</span>
+                                <input type="text" class="form-input" id="height" placeholder="175 cm">
+                            </div>
+                            <div>
+                                <label class="form-label">Weight</label>
+                                <span class="form-sublabel">e.g., 70 kg or 154 lbs</span>
+                                <input type="text" class="form-input" id="weight" placeholder="70 kg">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upper Body Measurements -->
+                    <div class="form-section">
+                        <h3>Upper Body</h3>
+                        <div class="form-row">
+                            <div>
+                                <label class="form-label">Chest circumference</label>
+                                <span class="form-sublabel">Measure around fullest part</span>
+                                <input type="number" class="form-input" id="chest" placeholder="cm" min="50" max="200">
+                            </div>
+                            <div>
+                                <label class="form-label">Waist circumference</label>
+                                <span class="form-sublabel">Measure at natural waistline</span>
+                                <input type="number" class="form-input" id="waist" placeholder="cm" min="40" max="180">
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-top: 15px;">
+                            <div>
+                                <label class="form-label">Shoulder width</label>
+                                <span class="form-sublabel">From shoulder point to point</span>
+                                <input type="number" class="form-input" id="shoulders" placeholder="cm" min="30" max="70">
+                            </div>
+                            <div>
+                                <label class="form-label">Neck circumference</label>
+                                <span class="form-sublabel">Measure at base of neck</span>
+                                <input type="number" class="form-input" id="neck" placeholder="cm" min="25" max="50">
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-top: 15px;">
+                            <div>
+                                <label class="form-label">Arm length</label>
+                                <span class="form-sublabel">From shoulder to wrist</span>
+                                <input type="number" class="form-input" id="armLength" placeholder="cm" min="40" max="100">
+                            </div>
+                            <div>
+                                <label class="form-label">Bicep circumference</label>
+                                <span class="form-sublabel">Measure at fullest part</span>
+                                <input type="number" class="form-input" id="bicep" placeholder="cm" min="15" max="50">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lower Body Measurements -->
+                    <div class="form-section">
+                        <h3>Lower Body</h3>
+                        <div class="form-row">
+                            <div>
+                                <label class="form-label">Hip circumference</label>
+                                <span class="form-sublabel">Measure at fullest part</span>
+                                <input type="number" class="form-input" id="hips" placeholder="cm" min="60" max="180">
+                            </div>
+                            <div>
+                                <label class="form-label">Inseam length</label>
+                                <span class="form-sublabel">From crotch to ankle</span>
+                                <input type="number" class="form-input" id="inseam" placeholder="cm" min="50" max="110">
+                            </div>
+                        </div>
+                        <div class="form-row" style="margin-top: 15px;">
+                            <div>
+                                <label class="form-label">Thigh circumference</label>
+                                <span class="form-sublabel">Measure at fullest part</span>
+                                <input type="number" class="form-input" id="thigh" placeholder="cm" min="35" max="90">
+                            </div>
+                            <div>
+                                <label class="form-label">Leg length</label>
+                                <span class="form-sublabel">From waist to floor</span>
+                                <input type="number" class="form-input" id="legLength" placeholder="cm" min="70" max="130">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preference Filters -->
+                    <div class="form-section">
+                        <h3>Search Preferences</h3>
+                        <div class="form-row">
+                            <div>
+                                <label class="form-label">Categories</label>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="category" value="tops" checked>
+                                        Tops
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="category" value="pants" checked>
+                                        Pants
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="category" value="shirts" checked>
+                                        Shirts
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="category" value="dresses">
+                                        Dresses
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="category" value="jackets">
+                                        Jackets
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" name="category" value="activewear">
+                                        Activewear
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <label class="form-label">Color Palette</label>
+                            <select class="form-input" id="color">
+                                <option value="all">All Colors</option>
+                                <optgroup label="🎨 Neutrals">
+                                    <option value="white">White</option>
+                                    <option value="black">Black</option>
+                                    <option value="gray">Gray</option>
+                                    <option value="beige">Beige</option>
+                                    <option value="brown">Brown</option>
+                                    <option value="tan">Tan</option>
+                                </optgroup>
+                                <optgroup label="💙 Cool Tones">
+                                    <option value="blue">Blue</option>
+                                    <option value="navy">Navy</option>
+                                    <option value="teal">Teal</option>
+                                    <option value="turquoise">Turquoise</option>
+                                    <option value="cyan">Cyan</option>
+                                    <option value="light blue">Light Blue</option>
+                                </optgroup>
+                                <optgroup label="❤️ Warm Tones">
+                                    <option value="red">Red</option>
+                                    <option value="orange">Orange</option>
+                                    <option value="yellow">Yellow</option>
+                                    <option value="pink">Pink</option>
+                                    <option value="coral">Coral</option>
+                                </optgroup>
+                                <optgroup label="💚 Nature Tones">
+                                    <option value="green">Green</option>
+                                    <option value="olive">Olive</option>
+                                    <option value="forest">Forest Green</option>
+                                    <option value="sage">Sage</option>
+                                    <option value="lime">Lime</option>
+                                </optgroup>
+                                <optgroup label="💜 Rich Tones">
+                                    <option value="purple">Purple</option>
+                                    <option value="violet">Violet</option>
+                                    <option value="maroon">Maroon</option>
+                                    <option value="burgundy">Burgundy</option>
+                                    <option value="wine">Wine</option>
+                                </optgroup>
+                                <optgroup label="✨ Special">
+                                    <option value="gold">Gold</option>
+                                    <option value="silver">Silver</option>
+                                    <option value="bronze">Bronze</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        
+                        <div style="margin-top: 15px;">
+                            <label class="form-label">Material</label>
+                            <select class="form-input" id="material">
+                                <option value="all">All Materials</option>
+                                <option value="cotton">Cotton</option>
+                                <option value="polyester">Polyester</option>
+                                <option value="wool">Wool</option>
+                                <option value="denim">Denim</option>
+                                <option value="linen">Linen</option>
+                                <option value="blend">Blend</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <label class="form-label">Style</label>
+                            <select class="form-input" id="style">
+                                <option value="all">All Styles</option>
+                                <option value="casual">Casual</option>
+                                <option value="formal">Formal</option>
+                                <option value="athletic">Athletic</option>
+                                <option value="business">Business</option>
+                                <option value="streetwear">Streetwear</option>
+                            </select>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <label class="form-label">Price Range</label>
+                            <select class="form-input" id="priceRange">
+                                <option value="all">All Prices</option>
+                                <option value="0-25">$0 - $25</option>
+                                <option value="25-50">$25 - $50</option>
+                                <option value="50-100">$50 - $100</option>
+                                <option value="100-200">$100 - $200</option>
+                                <option value="200+">$200+</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px; font-size: 16px;">
+                        🔍 Find My Forme
+                    </button>
+                </form>
+            </aside>
+
+            <section class="results-panel">
+                <h2>👕 Recommended For You</h2>
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label>Category</label>
+                        <select class="form-input" id="filterCategory">
+                            <option value="all">All Categories</option>
+                            <option value="tops">Tops</option>
+                            <option value="pants">Pants</option>
+                            <option value="shirts">Shirts</option>
+                            <option value="dresses">Dresses</option>
+                            <option value="jackets">Jackets</option>
+                            <option value="activewear">Activewear</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Fit Score</label>
+                        <select class="form-input" id="filterFitScore">
+                            <option value="all">All Matches</option>
+                            <option value="90">90%+ Perfect Match</option>
+                            <option value="80">80%+ Great Match</option>
+                            <option value="70">70%+ Good Match</option>
+                        </select>
+                    </div>
+                    <div class="filter-item">
+                        <label>Sort By</label>
+                        <select class="form-input" id="sortBy">
+                            <option value="fitScore">Best Fit First</option>
+                            <option value="priceLow">Price: Low to High</option>
+                            <option value="priceHigh">Price: High to Low</option>
+                            <option value="name">Name: A-Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="results-header">
+                    <div class="results-count">Showing <span id="resultsCount">0</span> items</div>
+                </div>
+
+                <div id="resultsContainer" class="products-grid">
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📏</div>
+                        <h3>Ready to Find Your Forme?</h3>
+                        <p>Enter your measurements and preferences on the left, then click "Find My Forme" to get personalized clothing recommendations based on your body measurements.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
