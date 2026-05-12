@@ -454,26 +454,30 @@ function searchClothing(event) {
         legLength: parseFloat(document.getElementById('legLength').value)
     };
     
-    // Get clothing from database or API
-    let relevantClothing = [];
-    
-    if (APIServices.config.useExternalAPI) {
-        console.log('🔌 Fetching from external API...');
-        APIServices.fetchFromExternalAPI({ gender, categories }).then(apiData => {
-            relevantClothing = APIServices.formatAPIResponse(apiData);
-            processClothingResults(relevantClothing, measurements, categories, color, material, style, priceRange);
-        });
+    // Always load demo database immediately as baseline
+    let demoClothing = [];
+    if (gender === 'male') {
+        demoClothing = [...clothingDatabase.men, ...clothingDatabase.unisex];
+    } else if (gender === 'female') {
+        demoClothing = [...clothingDatabase.women, ...clothingDatabase.unisex];
     } else {
-        console.log('📦 Using demo database');
-        if (gender === 'male') {
-            relevantClothing = [...clothingDatabase.men, ...clothingDatabase.unisex];
-        } else if (gender === 'female') {
-            relevantClothing = [...clothingDatabase.women, ...clothingDatabase.unisex];
-        } else {
-            relevantClothing = [...clothingDatabase.men, ...clothingDatabase.women, ...clothingDatabase.unisex];
-        }
-        
-        processClothingResults(relevantClothing, measurements, categories, color, material, style, priceRange);
+        demoClothing = [...clothingDatabase.men, ...clothingDatabase.women, ...clothingDatabase.unisex];
+    }
+
+    // Show demo results immediately
+    processClothingResults(demoClothing, measurements, categories, color, material, style, priceRange);
+
+    // Then try to enrich with API data in background
+    if (APIServices.config.useExternalAPI) {
+        APIServices.fetchFromExternalAPI({ gender, categories }).then(apiData => {
+            if (apiData && apiData.length > 0) {
+                const apiClothing = APIServices.formatAPIResponse(apiData);
+                const combined = [...demoClothing, ...apiClothing];
+                processClothingResults(combined, measurements, categories, color, material, style, priceRange);
+            }
+        }).catch(() => {
+            // API failed — demo results already shown, nothing to do
+        });
     }
 }
 
@@ -502,7 +506,11 @@ function processClothingResults(relevantClothing, measurements, categories, colo
         };
     });
     
-    currentResults = currentResults.filter(item => item.fitScore >= 50);
+    // Only apply fit score filter if at least one measurement was entered
+    const hasMeasurements = Object.values(measurements).some(v => v && !isNaN(v));
+    if (hasMeasurements) {
+        currentResults = currentResults.filter(item => item.fitScore >= 50);
+    }
     currentResults.sort((a, b) => b.fitScore - a.fitScore);
     
     filteredResults = [...currentResults];
@@ -591,7 +599,7 @@ function calculateFitScore(measurements, item) {
         factors++;
     }
     
-    return factors > 0 ? Math.round(score / factors) : 70;
+    return factors > 0 ? Math.round(score / factors) : 75;
 }
 
 function findBestSizeMatch(measurement, sizeRange) {
